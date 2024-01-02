@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Ordering.API.Controllers
 {
 	[ApiController]
-	[Route("api/[controller]")]
+	[Route("api/v1/[controller]")]
 	public class OrderController : ControllerBase
 	{
 		private readonly IMediator _mediator;
@@ -24,13 +24,12 @@ namespace Ordering.API.Controllers
 			_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 		}
 
-		[HttpGet("userName", Name = "GetOrder")]
+		[HttpGet("{userName}", Name = "GetOrder")]
 		[ProducesResponseType(typeof(IEnumerable<OrdersVm>), (int)HttpStatusCode.OK)]
-		public async Task<ActionResult<IEnumerable<OrdersVm>>> GetOrderByUserName(string userName)
+		public async Task<ActionResult<IEnumerable<OrdersVm>>> GetOrdersByUserName(string userName)
 		{
 			var query = new GetOrdersListQuery(userName);
-			var orders =  await _mediator.Send(query);
-
+			var orders = await _mediator.Send(query);
 			return Ok(orders);
 		}
 
@@ -39,8 +38,7 @@ namespace Ordering.API.Controllers
 		[ProducesResponseType((int)HttpStatusCode.OK)]
 		public async Task<ActionResult<int>> CheckoutOrder([FromBody] CheckoutOrderCommand command)
 		{
-			var result = _mediator.Send(command);
-
+			var result = await _mediator.Send(command);
 			return Ok(result);
 		}
 
@@ -51,7 +49,6 @@ namespace Ordering.API.Controllers
 		public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrderCommand command)
 		{
 			await _mediator.Send(command);
-
 			return NoContent();
 		}
 
@@ -59,13 +56,11 @@ namespace Ordering.API.Controllers
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesDefaultResponseType]
-		public async Task<ActionResult> UpdateOrder(int id)
+		public async Task<ActionResult> DeleteOrder(int id)
 		{
 			var command = new DeleteOrderCommand() { Id = id };
 			await _mediator.Send(command);
-
 			return NoContent();
 		}
-
 	}
 }
