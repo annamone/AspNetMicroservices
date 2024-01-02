@@ -14,9 +14,9 @@ namespace Ordering.Infrastructure.Repositories
 	{
 		protected readonly OrderContext _dbContext;
 
-		public RepositoryBase(OrderContext orderContext)
+		public RepositoryBase(OrderContext dbContext)
 		{
-			_dbContext = orderContext ?? throw new ArgumentNullException(nameof(orderContext));
+			_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 		}
 
 		public async Task<IReadOnlyList<T>> GetAllAsync()
@@ -66,7 +66,6 @@ namespace Ordering.Infrastructure.Repositories
 		{
 			_dbContext.Set<T>().Add(entity);
 			await _dbContext.SaveChangesAsync();
-
 			return entity;
 		}
 
