@@ -30,7 +30,7 @@ services:
   orderdb:
     container_name: orderdb
     environment: 
-       SA_Password: "Admin1@3456"
+       SA_PASSWORD: "Admin1@3456"
        ACCEPT_EULA: "Y"
     restart: always
     ports:
