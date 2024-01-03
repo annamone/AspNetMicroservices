@@ -26,6 +26,7 @@ namespace Basket.API
 
 			// General Cofiguration
 			builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+			builder.Services.AddAutoMapper(typeof(Program));
 
 			//Grpc Cofiguration
 			builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
@@ -35,10 +36,7 @@ namespace Basket.API
 			// MassTransit-RabbitMQ Configuration
 			builder.Services.AddMassTransit(config =>
 			{
-				config.UsingRabbitMq((ctx, cfg) =>
-				{
-					cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
-				});
+				config.UsingRabbitMq();
 			});
 
 			builder.Services.AddControllers();
